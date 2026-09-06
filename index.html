@@ -1,2016 +1,1425 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-  <meta charset="UTF-8">
-
+  <meta charset="UTF-8" />
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
-  >
+  />
 
   <title>X Message Randomizer</title>
 
   <style>
-
     * {
       box-sizing: border-box;
     }
 
-
     body {
       margin: 0;
-      padding: 24px;
-
-      background: #f5f7fa;
-
       font-family:
         -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
-        Roboto,
         Arial,
         sans-serif;
 
-      color: #1f2937;
+      background: #f5f5f5;
+      color: #111;
     }
-
 
     .container {
-      width: 100%;
-      max-width: 1000px;
-
+      max-width: 900px;
       margin: 0 auto;
+      padding: 24px 16px 60px;
     }
-
-
-    /* =========================
-       TITLE
-    ========================= */
 
     h1 {
-      margin: 0 0 24px;
-
       text-align: center;
-
-      font-size: 28px;
-    }
-
-
-    /* =========================
-       TOPIC SELECT
-    ========================= */
-
-    .topic-box {
-      background: white;
-
-      padding: 18px;
-
-      border-radius: 14px;
-
       margin-bottom: 24px;
-
-      box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.06);
     }
 
-
-    .topic-box label {
-      display: block;
-
-      margin-bottom: 8px;
-
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-
-    select {
+    .topic-select {
       width: 100%;
-
       padding: 12px 14px;
-
-      border: 1px solid #d1d5db;
-
-      border-radius: 10px;
-
-      background: white;
-
       font-size: 16px;
-
-      outline: none;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: white;
+      margin-bottom: 20px;
     }
-
-
-    select:focus {
-      border-color: #1d9bf0;
-    }
-
-
-    /* =========================
-       STATUS
-    ========================= */
-
-    .status {
-      text-align: center;
-
-      margin: 16px 0;
-
-      color: #6b7280;
-
-      font-size: 14px;
-    }
-
-
-    .status.error {
-      color: #dc2626;
-    }
-
-
-    /* =========================
-       SECTION
-    ========================= */
 
     .section-title {
-      margin: 28px 0 14px;
-
-      font-size: 22px;
-
-      font-weight: 800;
+      margin-top: 28px;
+      margin-bottom: 12px;
+      font-size: 20px;
+      font-weight: 700;
     }
-
-
-    /* =========================
-       CARD
-    ========================= */
 
     .card {
       background: white;
-
       border-radius: 14px;
-
-      padding: 18px;
-
+      padding: 16px;
       margin-bottom: 16px;
-
-      box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
-
-
-    /* =========================
-       CARD HEADER
-    ========================= */
 
     .card-header {
       display: flex;
-
-      align-items: center;
-
       justify-content: space-between;
-
-      gap: 12px;
-
+      align-items: center;
       margin-bottom: 12px;
     }
 
-
     .account {
-      font-size: 16px;
-
       font-weight: 700;
+      font-size: 15px;
     }
-
 
     .tweet-id {
-      color: #6b7280;
-
       font-size: 13px;
-
-      white-space: nowrap;
+      color: #777;
+      margin-top: 4px;
     }
 
-
-    /* =========================
-       MESSAGE
-    ========================= */
+    .remaining {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 10px;
+    }
 
     .message-box {
       position: relative;
-
-      min-height: 80px;
-
-      padding: 16px;
-
-      padding-right: 82px;
-
-      margin-bottom: 14px;
-
-      background: #f9fafb;
-
-      border: 1px solid #e5e7eb;
-
+      background: #f7f7f7;
+      border: 1px solid #ddd;
       border-radius: 10px;
-
+      padding: 14px;
+      min-height: 100px;
       white-space: pre-wrap;
-
       word-break: break-word;
-
-      line-height: 1.6;
-
-      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 12px;
     }
-
 
     .message-placeholder {
-      color: #9ca3af;
+      color: #999;
     }
-
-
-    /* =========================
-       COPY
-    ========================= */
 
     .copy-btn {
       position: absolute;
-
       top: 8px;
       right: 8px;
-
-      padding: 6px 10px;
-
-      border: 1px solid #d1d5db;
-
-      border-radius: 7px;
-
+      border: none;
       background: white;
-
+      border: 1px solid #ddd;
+      border-radius: 7px;
+      padding: 5px 9px;
       cursor: pointer;
-
       font-size: 12px;
-
-      font-weight: 600;
     }
-
 
     .copy-btn:hover {
-      background: #f3f4f6;
+      background: #eee;
     }
 
-
-    /* =========================
-       ACTIONS
-    ========================= */
+    .message-text {
+      padding-right: 55px;
+    }
 
     .actions {
       display: flex;
-
       gap: 8px;
-
       flex-wrap: wrap;
     }
 
-
     button {
       border: none;
-
       border-radius: 9px;
-
-      padding: 10px 14px;
-
+      padding: 10px 15px;
       cursor: pointer;
-
       font-size: 14px;
-
-      font-weight: 700;
+      font-weight: 600;
     }
-
-
-    button:disabled {
-      opacity: 0.5;
-
-      cursor: not-allowed;
-    }
-
 
     .random-btn {
-      background: #111827;
-
+      background: #111;
       color: white;
     }
 
-
     .random-btn:hover {
-      background: #374151;
+      background: #333;
     }
-
 
     .post-btn,
     .reply-btn {
       background: #1d9bf0;
-
       color: white;
     }
 
-
     .post-btn:hover,
     .reply-btn:hover {
-      background: #1688d4;
+      background: #1687d1;
     }
 
-
-    /* =========================
-       REMAINING
-    ========================= */
-
-    .remaining {
-      margin-top: 10px;
-
-      color: #6b7280;
-
-      font-size: 13px;
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
-
-    .remaining-count {
-      font-weight: 700;
-
-      color: #374151;
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #777;
     }
 
-
-    /* =========================
-       EMPTY
-    ========================= */
+    .error {
+      background: #ffe5e5;
+      color: #b00020;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      white-space: pre-wrap;
+    }
 
     .empty {
       background: white;
-
-      padding: 30px;
-
-      border-radius: 14px;
-
+      padding: 20px;
+      border-radius: 12px;
+      color: #777;
       text-align: center;
-
-      color: #6b7280;
-
-      margin-bottom: 16px;
     }
-
-
-    /* =========================
-       MOBILE
-    ========================= */
-
-    @media (max-width: 600px) {
-
-      body {
-        padding: 12px;
-      }
-
-
-      h1 {
-        font-size: 24px;
-      }
-
-
-      .card {
-        padding: 14px;
-      }
-
-
-      .actions button {
-        flex: 1;
-      }
-
-
-      .card-header {
-        align-items: flex-start;
-      }
-
-    }
-
   </style>
-
 </head>
-
 
 <body>
 
   <div class="container">
 
-    <h1>
-      Avengers-OH💋-Assemble....💅
-    </h1>
+    <h1>🎲 X Message Randomizer</h1>
 
+    <select
+      id="topic-select"
+      class="topic-select"
+    >
+      <option value="">กำลังโหลด Topic...</option>
+    </select>
 
-    <!-- =========================
-         TOPIC
-    ========================= -->
-
-    <div class="topic-box">
-
-      <label for="topicSelect">
-        เลือก Topic
-      </label>
-
-
-      <select id="topicSelect">
-
-        <option value="">
-          -- เลือก Topic --
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <!-- =========================
-         STATUS
-    ========================= -->
-
-    <div
-      id="status"
-      class="status"
-    ></div>
-
-
-    <!-- =========================
-         CONTENT
-    ========================= -->
+    <div id="error-container"></div>
 
     <div id="content"></div>
 
   </div>
 
 
-<script>
+  <script>
 
-/* =========================================================
-   CONFIG
-========================================================= */
+    /* =====================================================
+       CONFIG
+    ===================================================== */
 
+    // URL CSV ของ sheet "main"
+    const MAIN_CSV_URL =
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-CnwPK2fSRjsBrmWn3XVIXZEbDFPGguJQeco7B4nNv-7YOcxmIk0ge1846CC5OB8o3sqWK7TwIo_a/pub?output=csv";
 
-/*
- * ========================================================
- * MAIN SHEET CSV URL
- * ========================================================
- *
- * main sheet ต้องมี column:
- *
- * Topic
- * acc_name
- * link_post
- * tweet_id
- *
- */
-const MAIN_CSV_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-CnwPK2fSRjsBrmWn3XVIXZEbDFPGguJQeco7B4nNv-7YOcxmIk0ge1846CC5OB8o3sqWK7TwIo_a/pub?output=csv";
+    // Spreadsheet ID
+    const SPREADSHEET_ID =
+      "1RJ7OzLLgvMSKdVTxVfKOqQXir7vXIIyWpa_gImp1PzM";
+
+    // Supabase
+    const SUPABASE_URL =
+      "https://romrjbyaqckrpvobbzkw.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_4DN0Penjs0vuTYzVdY4-Ug_AmsxurCE";
 
 
-/*
- * ========================================================
- * GOOGLE SPREADSHEET ID
- * ========================================================
- */
-const SPREADSHEET_ID =
-  "1RJ7OzLLgvMSKdVTxVfKOqQXir7vXIIyWpa_gImp1PzM";
+    /* =====================================================
+       GLOBAL STATE
+    ===================================================== */
+
+    let mainRows = [];
+
+    let topics = [];
+
+    const topicStates = {};
 
 
-/*
- * ========================================================
- * SUPABASE
- * ========================================================
- */
-const SUPABASE_URL =
-  "https://romrjbyaqckrpvobbzkw.supabase.co";
+    /* =====================================================
+       DOM
+    ===================================================== */
+
+    const topicSelect =
+      document.getElementById("topic-select");
+
+    const content =
+      document.getElementById("content");
+
+    const errorContainer =
+      document.getElementById("error-container");
 
 
-/*
- * ใช้ Publishable / anon key เท่านั้น
- *
- * ห้ามใช้ service_role key
- */
-const SUPABASE_KEY =
-  "sb_publishable_4DN0Penjs0vuTYzVdY4-Ug_AmsxurCE";
+    /* =====================================================
+       INITIAL LOAD
+    ===================================================== */
 
+    document.addEventListener(
+      "DOMContentLoaded",
+      async () => {
 
-/* =========================================================
-   GLOBAL STATE
-========================================================= */
+        try {
 
-let mainRows = [];
+          await loadMainSheet();
 
-let currentTopic = "";
+          buildTopicList();
 
+        } catch (error) {
 
-/* =========================================================
-   ELEMENTS
-========================================================= */
+          console.error(error);
 
-const topicSelect =
-  document.getElementById(
-    "topicSelect"
-  );
+          showError(
+            "โหลดข้อมูลไม่สำเร็จ\n" +
+            error.message
+          );
 
+        }
 
-const statusEl =
-  document.getElementById(
-    "status"
-  );
-
-
-const contentEl =
-  document.getElementById(
-    "content"
-  );
-
-
-/* =========================================================
-   INIT
-========================================================= */
-
-init();
-
-
-async function init() {
-
-  try {
-
-    setStatus(
-      "กำลังโหลดข้อมูล..."
+      }
     );
 
 
-    mainRows =
-      await loadMainSheet();
-
-
-    populateTopics();
-
-
-    setStatus("");
-
-  }
-
-  catch (error) {
-
-    console.error(error);
-
-
-    setStatus(
-      "โหลดข้อมูลไม่สำเร็จ: " +
-      error.message,
-      true
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   LOAD MAIN
-========================================================= */
-
-async function loadMainSheet() {
-
-  const url =
-    MAIN_CSV_URL +
-    (
-      MAIN_CSV_URL.includes("?")
-        ? "&"
-        : "?"
-    ) +
-    "t=" +
-    Date.now();
-
-
-  const response =
-    await fetch(url);
-
-
-  if (!response.ok) {
-
-    throw new Error(
-      "ไม่สามารถโหลด main sheet ได้"
-    );
-
-  }
-
-
-  const csvText =
-    await response.text();
-
-
-  return parseCSV(csvText);
-
-}
-
-
-/* =========================================================
-   LOAD CHILD SHEET
-========================================================= */
-
-async function loadSheet(
-  sheetName
-) {
-
-  const url =
-    "https://docs.google.com/spreadsheets/d/" +
-    SPREADSHEET_ID +
-    "/gviz/tq?tqx=out:csv&sheet=" +
-    encodeURIComponent(sheetName) +
-    "&t=" +
-    Date.now();
-
-
-  const response =
-    await fetch(url);
-
-
-  if (!response.ok) {
-
-    throw new Error(
-      `โหลด sheet ${sheetName} ไม่สำเร็จ`
-    );
-
-  }
-
-
-  const csvText =
-    await response.text();
-
-
-  const rows =
-    parseCSV(csvText);
-
-
-  /*
-   * ใช้เฉพาะ:
-   *
-   * message_id
-   * tweet_id
-   * text
-   *
-   * ไม่ใช้:
-   *
-   * message
-   * hashtag
-   * status
-   */
-
-  return rows
-
-    .map(row => {
-
-      return {
-
-        messageId:
-          String(
-            row.message_id || ""
-          ).trim(),
-
-
-        tweetId:
-          String(
-            row.tweet_id || ""
-          ).trim(),
-
-
-        text:
-          normalizeText(
-            row.text || ""
-          )
-
-      };
-
-    })
-
-    .filter(row => {
-
-      return (
-        row.messageId &&
-        row.text
-      );
-
-    });
-
-}
-
-
-/* =========================================================
-   CSV PARSER
-========================================================= */
-
-function parseCSV(csv) {
-
-  const rows = [];
-
-  let row = [];
-
-  let value = "";
-
-  let insideQuotes = false;
-
-
-  for (
-    let i = 0;
-    i < csv.length;
-    i++
-  ) {
-
-    const char =
-      csv[i];
-
-
-    const next =
-      csv[i + 1];
-
-
-    /*
-     * Escaped quote:
-     * ""
-     */
-    if (
-      char === '"' &&
-      insideQuotes &&
-      next === '"'
-    ) {
-
-      value += '"';
-
-      i++;
-
-      continue;
-
-    }
-
-
-    /*
-     * Quote
-     */
-    if (char === '"') {
-
-      insideQuotes =
-        !insideQuotes;
-
-      continue;
-
-    }
-
-
-    /*
-     * Comma
-     */
-    if (
-      char === "," &&
-      !insideQuotes
-    ) {
-
-      row.push(value);
-
-      value = "";
-
-      continue;
-
-    }
-
-
-    /*
-     * Newline
-     */
-    if (
-      (
-        char === "\n" ||
-        char === "\r"
-      ) &&
-      !insideQuotes
-    ) {
+    /* =====================================================
+       LOAD MAIN SHEET
+    ===================================================== */
+
+    async function loadMainSheet() {
 
       if (
-        char === "\r" &&
-        next === "\n"
+        !MAIN_CSV_URL ||
+        MAIN_CSV_URL.includes("ใส่_URL")
       ) {
+        throw new Error(
+          "กรุณาใส่ MAIN_CSV_URL"
+        );
+      }
 
-        i++;
+      const response =
+        await fetch(MAIN_CSV_URL);
+
+      if (!response.ok) {
+
+        throw new Error(
+          `โหลด main sheet ไม่สำเร็จ: ${response.status}`
+        );
+
+      }
+
+      const csvText =
+        await response.text();
+
+      mainRows =
+        parseCSV(csvText);
+
+    }
+
+
+    /* =====================================================
+       BUILD TOPIC LIST
+    ===================================================== */
+
+    function buildTopicList() {
+
+      const topicSet =
+        new Set();
+
+      mainRows.forEach(row => {
+
+        const topic =
+          String(row.topic || "").trim();
+
+        if (topic) {
+
+          topicSet.add(topic);
+
+        }
+
+      });
+
+      topics =
+        Array.from(topicSet);
+
+      topicSelect.innerHTML =
+        `<option value="">
+          เลือก Topic
+        </option>`;
+
+      topics.forEach(topic => {
+
+        const option =
+          document.createElement("option");
+
+        option.value =
+          topic;
+
+        option.textContent =
+          topic;
+
+        topicSelect.appendChild(option);
+
+      });
+
+    }
+
+
+    /* =====================================================
+       TOPIC CHANGE
+    ===================================================== */
+
+    topicSelect.addEventListener(
+      "change",
+      async () => {
+
+        const topic =
+          topicSelect.value;
+
+        content.innerHTML = "";
+
+        clearError();
+
+        if (!topic) {
+
+          return;
+
+        }
+
+        try {
+
+          await loadTopic(topic);
+
+        } catch (error) {
+
+          console.error(error);
+
+          showError(
+            "โหลด Topic ไม่สำเร็จ\n" +
+            error.message
+          );
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       LOAD TOPIC
+    ===================================================== */
+
+    async function loadTopic(topic) {
+
+      content.innerHTML =
+        `<div class="loading">
+          กำลังโหลดข้อมูล...
+        </div>`;
+
+
+      /*
+       * ---------------------------------------------------
+       * POST
+       * ---------------------------------------------------
+       */
+
+      const postRows =
+        await loadChildSheet(
+          `P_${topic}`
+        );
+
+
+      /*
+       * ---------------------------------------------------
+       * REPLY
+       * ---------------------------------------------------
+       */
+
+      const replyTweets =
+        getReplyTweets(topic);
+
+
+      content.innerHTML = "";
+
+
+      /*
+       * POST SECTION
+       */
+
+      const postTitle =
+        document.createElement("div");
+
+      postTitle.className =
+        "section-title";
+
+      postTitle.textContent =
+        "POST";
+
+      content.appendChild(
+        postTitle
+      );
+
+
+      if (postRows.length === 0) {
+
+        const empty =
+          document.createElement("div");
+
+        empty.className =
+          "empty";
+
+        empty.textContent =
+          "ไม่พบข้อความ POST";
+
+        content.appendChild(
+          empty
+        );
+
+      } else {
+
+        const postCard =
+          createPostCard(
+            topic,
+            postRows
+          );
+
+        content.appendChild(
+          postCard
+        );
 
       }
 
 
-      row.push(value);
+      /*
+       * REPLY SECTION
+       */
 
-      rows.push(row);
+      const replyTitle =
+        document.createElement("div");
+
+      replyTitle.className =
+        "section-title";
+
+      replyTitle.textContent =
+        "REPLY";
+
+      content.appendChild(
+        replyTitle
+      );
 
 
-      row = [];
+      if (replyTweets.length === 0) {
 
-      value = "";
+        const empty =
+          document.createElement("div");
 
-      continue;
+        empty.className =
+          "empty";
+
+        empty.textContent =
+          "ไม่พบ Tweet สำหรับ REPLY";
+
+        content.appendChild(
+          empty
+        );
+
+      } else {
+
+        for (
+          const tweet of replyTweets
+        ) {
+
+          const card =
+            await createReplyCard(
+              topic,
+              tweet
+            );
+
+          content.appendChild(
+            card
+          );
+
+        }
+
+      }
 
     }
 
 
-    value += char;
+    /* =====================================================
+       GET REPLY TWEETS FROM MAIN
+    ===================================================== */
 
-  }
+    function getReplyTweets(topic) {
 
-
-  /*
-   * Last row
-   */
-  if (
-    value !== "" ||
-    row.length > 0
-  ) {
-
-    row.push(value);
-
-    rows.push(row);
-
-  }
+      const map =
+        new Map();
 
 
-  if (
-    rows.length === 0
-  ) {
+      mainRows
+        .filter(row =>
+          String(row.topic || "").trim()
+          === topic
+        )
+        .forEach(row => {
 
-    return [];
+          const tweetId =
+            String(
+              row.tweet_id || ""
+            ).trim();
 
-  }
+          if (!tweetId) {
 
+            return;
 
-  /*
-   * Header
-   */
-  const headers =
-    rows[0].map(
-      header =>
-        String(header)
-          .trim()
-          .toLowerCase()
-    );
+          }
 
 
-  /*
-   * Convert rows → objects
-   */
-  return rows
-    .slice(1)
+          if (!map.has(tweetId)) {
 
-    .filter(row => {
+            map.set(
+              tweetId,
+              {
+                tweetId,
+                accName:
+                  String(
+                    row.acc_name || ""
+                  ).trim()
+              }
+            );
 
-      return row.some(
-        cell =>
-          String(cell).trim() !== ""
+          }
+
+        });
+
+
+      return Array.from(
+        map.values()
       );
 
-    })
-
-    .map(row => {
-
-      const obj = {};
+    }
 
 
-      headers.forEach(
-        (header, index) => {
+    /* =====================================================
+       CREATE POST CARD
+    ===================================================== */
 
-          obj[header] =
-            String(
-              row[index] ?? ""
-            ).trim();
+    function createPostCard(
+      topic,
+      rows
+    ) {
+
+      const messages =
+        rows
+          .map(row => ({
+            messageId:
+              String(
+                row.message_id || ""
+              ).trim(),
+
+            text:
+              normalizeText(
+                row.text || ""
+              )
+          }))
+          .filter(
+            row =>
+              row.messageId &&
+              row.text
+          );
+
+
+      const state = {
+
+        topic,
+
+        messages,
+
+        currentMessage: null,
+
+        remaining: messages.length,
+
+        isRandomizing: false
+
+      };
+
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "card";
+
+
+      card.innerHTML = `
+
+        <div class="card-header">
+
+          <div class="account">
+            POST
+          </div>
+
+        </div>
+
+
+        <div class="remaining">
+          message ที่เหลือ:
+          <span class="remaining-count">
+            กำลังโหลด...
+          </span>
+        </div>
+
+
+        <div class="message-box">
+
+          <button
+            class="copy-btn"
+            type="button"
+          >
+            📋 Copy
+          </button>
+
+          <div class="message-text">
+            <span class="message-placeholder">
+              กด 🎲 สุ่มข้อความ
+            </span>
+          </div>
+
+        </div>
+
+
+        <div class="actions">
+
+          <button
+            class="random-btn"
+            type="button"
+          >
+            🎲 สุ่มข้อความ
+          </button>
+
+          <button
+            class="post-btn"
+            type="button"
+            disabled
+          >
+            Post
+          </button>
+
+        </div>
+
+      `;
+
+
+      const remainingCount =
+        card.querySelector(
+          ".remaining-count"
+        );
+
+      const messageText =
+        card.querySelector(
+          ".message-text"
+        );
+
+      const copyBtn =
+        card.querySelector(
+          ".copy-btn"
+        );
+
+      const randomBtn =
+        card.querySelector(
+          ".random-btn"
+        );
+
+      const postBtn =
+        card.querySelector(
+          ".post-btn"
+        );
+
+
+      /*
+       * ---------------------------------------------------
+       * INITIAL GLOBAL COUNT
+       * ---------------------------------------------------
+       */
+
+      initializePostRemaining(
+        state,
+        remainingCount
+      );
+
+
+      /*
+       * ---------------------------------------------------
+       * RANDOM
+       * ---------------------------------------------------
+       */
+
+      randomBtn.addEventListener(
+        "click",
+        async () => {
+
+          if (
+            state.isRandomizing
+          ) {
+
+            return;
+
+          }
+
+
+          state.isRandomizing =
+            true;
+
+          randomBtn.disabled =
+            true;
+
+
+          try {
+
+            const result =
+              await claimRandomPost(
+                state
+              );
+
+
+            if (!result) {
+
+              messageText.innerHTML = `
+                <span class="message-placeholder">
+                  ข้อความหมดแล้ว
+                </span>
+              `;
+
+              postBtn.disabled =
+                true;
+
+              return;
+
+            }
+
+
+            state.currentMessage =
+              result;
+
+
+            messageText.textContent =
+              result.text;
+
+
+            postBtn.disabled =
+              false;
+
+
+            /*
+             * Refresh count from Supabase
+             */
+
+            await refreshPostRemaining(
+              state,
+              remainingCount
+            );
+
+
+          } catch (error) {
+
+            console.error(error);
+
+            showError(
+              "สุ่มข้อความ POST ไม่สำเร็จ\n" +
+              error.message
+            );
+
+          } finally {
+
+            state.isRandomizing =
+              false;
+
+            randomBtn.disabled =
+              state.remaining <= 0;
+
+          }
 
         }
       );
 
 
-      return obj;
-
-    });
-
-}
-
-
-/* =========================================================
-   NORMALIZE TEXT
-========================================================= */
-
-function normalizeText(
-  text
-) {
-
-  return String(text)
-
-    /*
-     * HTML line break
-     */
-    .replace(
-      /<br\s*\/?>/gi,
-      "\n"
-    )
-
-    /*
-     * HTML paragraph break
-     */
-    .replace(
-      /<\/p>\s*<p>/gi,
-      "\n"
-    )
-
-    /*
-     * Remove remaining HTML tags
-     */
-    .replace(
-      /<[^>]*>/g,
-      ""
-    )
-
-    /*
-     * Decode common HTML entities
-     */
-    .replace(
-      /&nbsp;/gi,
-      " "
-    )
-
-    .replace(
-      /&amp;/gi,
-      "&"
-    )
-
-    .replace(
-      /&lt;/gi,
-      "<"
-    )
-
-    .replace(
-      /&gt;/gi,
-      ">"
-    )
-
-    .trim();
-
-}
-
-
-/* =========================================================
-   POPULATE TOPICS
-========================================================= */
-
-function populateTopics() {
-
-  const topics = [
-    ...new Set(
-
-      mainRows
-
-        .map(row =>
-          String(
-            row.topic || ""
-          ).trim()
-        )
-
-        .filter(Boolean)
-
-    )
-  ];
-
-
-  topicSelect.innerHTML =
-    `
-      <option value="">
-        -- เลือก Topic --
-      </option>
-    `;
-
-
-  topics.forEach(topic => {
-
-    const option =
-      document.createElement(
-        "option"
-      );
-
-
-    option.value =
-      topic;
-
-
-    option.textContent =
-      topic;
-
-
-    topicSelect.appendChild(
-      option
-    );
-
-  });
-
-}
-
-
-/* =========================================================
-   TOPIC CHANGE
-========================================================= */
-
-topicSelect.addEventListener(
-  "change",
-  async function () {
-
-    currentTopic =
-      this.value;
-
-
-    contentEl.innerHTML =
-      "";
-
-
-    if (!currentTopic) {
-
-      return;
-
-    }
-
-
-    try {
-
-      setStatus(
-        "กำลังโหลดข้อความ..."
-      );
-
-
-      await renderTopic();
-
-
-      setStatus("");
-
-    }
-
-    catch (error) {
-
-      console.error(error);
-
-
-      setStatus(
-        "เกิดข้อผิดพลาด: " +
-        error.message,
-        true
-      );
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   RENDER TOPIC
-========================================================= */
-
-async function renderTopic() {
-
-  /*
-   * ======================================================
-   * POST
-   * ======================================================
-   */
-
-  const postTitle =
-    document.createElement(
-      "div"
-    );
-
-
-  postTitle.className =
-    "section-title";
-
-
-  postTitle.textContent =
-    "📢 POST";
-
-
-  contentEl.appendChild(
-    postTitle
-  );
-
-
-  const postSheetName =
-    `P_${currentTopic}`;
-
-
-  let postMessages = [];
-
-
-  try {
-
-    postMessages =
-      await loadSheet(
-        postSheetName
-      );
-
-  }
-
-  catch (error) {
-
-    console.error(error);
-
-    postMessages = [];
-
-  }
-
-
-  if (
-    postMessages.length === 0
-  ) {
-
-    const empty =
-      createEmpty(
-        "ไม่พบข้อความ POST"
-      );
-
-
-    contentEl.appendChild(
-      empty
-    );
-
-  }
-
-  else {
-
-    const card =
-      createPostCard(
-        currentTopic,
-        postMessages
-      );
-
-
-    contentEl.appendChild(
-      card
-    );
-
-  }
-
-
-  /*
-   * ======================================================
-   * REPLY
-   * ======================================================
-   */
-
-  const replyTitle =
-    document.createElement(
-      "div"
-    );
-
-
-  replyTitle.className =
-    "section-title";
-
-
-  replyTitle.textContent =
-    "💬 REPLY";
-
-
-  contentEl.appendChild(
-    replyTitle
-  );
-
-
-  const tweets =
-    getUniqueTweets(
-      currentTopic
-    );
-
-
-  if (
-    tweets.length === 0
-  ) {
-
-    const empty =
-      createEmpty(
-        "ไม่พบ Tweet สำหรับ Reply"
-      );
-
-
-    contentEl.appendChild(
-      empty
-    );
-
-
-    return;
-
-  }
-
-
-  /*
-   * Load reply sheets
-   */
-  for (
-    const tweet of tweets
-  ) {
-
-    let messages = [];
-
-
-    try {
-
-      messages =
-        await loadSheet(
-          `R_${tweet.tweetId}`
-        );
-
-    }
-
-    catch (error) {
-
-      console.error(
-        "Reply sheet error:",
-        tweet.tweetId,
-        error
-      );
-
-    }
-
-
-    const card =
-      createReplyCard(
-        tweet,
-        messages
-      );
-
-
-    contentEl.appendChild(
-      card
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   GET UNIQUE TWEETS
-========================================================= */
-
-function getUniqueTweets(
-  topic
-) {
-
-  const map =
-    new Map();
-
-
-  mainRows
-
-    .filter(row => {
-
-      return (
-        String(
-          row.topic || ""
-        ).trim() === topic
-      );
-
-    })
-
-
-    .forEach(row => {
-
-      const tweetId =
-        String(
-          row.tweet_id || ""
-        ).trim();
-
-
-      if (!tweetId) {
-
-        return;
-
-      }
-
-
-      if (!map.has(tweetId)) {
-
-        map.set(
-          tweetId,
-          {
-
-            tweetId,
-
-            accName:
-              String(
-                row.acc_name || ""
-              ).trim(),
-
-            linkPost:
-              String(
-                row.link_post || ""
-              ).trim()
+      /*
+       * ---------------------------------------------------
+       * COPY
+       * ---------------------------------------------------
+       */
+
+      copyBtn.addEventListener(
+        "click",
+        async () => {
+
+          if (
+            !state.currentMessage
+          ) {
+
+            return;
 
           }
-        );
 
-      }
 
-    });
+          try {
 
+            await navigator.clipboard.writeText(
+              state.currentMessage.text
+            );
 
-  return [
-    ...map.values()
-  ];
+            copyBtn.textContent =
+              "✓ Copied";
 
-}
+            setTimeout(
+              () => {
 
+                copyBtn.textContent =
+                  "📋 Copy";
 
-/* =========================================================
-   CREATE POST CARD
-========================================================= */
+              },
+              1000
+            );
 
-function createPostCard(
-  topic,
-  messages
-) {
+          } catch (error) {
 
-  const card =
-    document.createElement(
-      "div"
-    );
+            console.error(error);
 
+            showError(
+              "Copy ไม่สำเร็จ"
+            );
 
-  card.className =
-    "card";
+          }
 
-
-  /*
-   * IMPORTANT:
-   *
-   * ห้ามใช้ state ใน innerHTML
-   * ก่อน state จะถูกสร้าง
-   */
-
-  card.innerHTML = `
-
-    <div class="card-header">
-
-      <div class="account">
-        POST
-      </div>
-
-    </div>
-
-
-    <div class="message-box">
-
-      <span
-        class="message-text message-placeholder"
-      >
-        กดสุ่มข้อความ
-      </span>
-
-
-      <button
-        class="copy-btn"
-        type="button"
-      >
-        📋 Copy
-      </button>
-
-    </div>
-
-
-    <div class="actions">
-
-      <button
-        class="random-btn"
-        type="button"
-      >
-        🎲 สุ่มข้อความ
-      </button>
-
-
-      <button
-        class="post-btn"
-        type="button"
-        disabled
-      >
-        Post
-      </button>
-
-    </div>
-
-
-    <div class="remaining">
-
-      message ที่เหลือ:
-      <span class="remaining-count">
-        ${messages.length}/${messages.length}
-      </span>
-
-    </div>
-
-  `;
-
-
-  const messageText =
-    card.querySelector(
-      ".message-text"
-    );
-
-
-  const copyBtn =
-    card.querySelector(
-      ".copy-btn"
-    );
-
-
-  const randomBtn =
-    card.querySelector(
-      ".random-btn"
-    );
-
-
-  const postBtn =
-    card.querySelector(
-      ".post-btn"
-    );
-
-
-  const remainingCount =
-    card.querySelector(
-      ".remaining-count"
-    );
-
-
-  /*
-   * ======================================================
-   * LOCAL CARD STATE
-   * ======================================================
-   */
-
-  const state = {
-
-    topic,
-
-    messages,
-
-    currentMessage:
-      null,
-
-    remaining:
-      messages.length,
-
-    busy:
-      false
-
-  };
-
-
-  /*
-   * ======================================================
-   * INITIAL GLOBAL COUNT
-   * ======================================================
-   *
-   * ตอน render ยังไม่ query Supabase
-   * จึงแสดง total/total ก่อน
-   *
-   * เช่น:
-   * 3/3
-   */
-
-  updateRemaining(
-    remainingCount,
-    state.remaining,
-    state.messages.length
-  );
-
-
-  /*
-   * ======================================================
-   * RANDOM
-   * ======================================================
-   */
-
-  randomBtn.addEventListener(
-    "click",
-    async () => {
-
-      await randomPost(
-        state,
-        messageText,
-        postBtn,
-        remainingCount,
-        randomBtn
-      );
-
-    }
-  );
-
-
-  /*
-   * ======================================================
-   * COPY
-   * ======================================================
-   */
-
-  copyBtn.addEventListener(
-    "click",
-    async () => {
-
-      if (
-        !state.currentMessage
-      ) {
-
-        alert(
-          "กรุณาสุ่มข้อความก่อน"
-        );
-
-        return;
-
-      }
-
-
-      await copyText(
-        state.currentMessage.text
-      );
-
-    }
-  );
-
-
-  /*
-   * ======================================================
-   * POST
-   * ======================================================
-   */
-
-  postBtn.addEventListener(
-    "click",
-    () => {
-
-      if (
-        !state.currentMessage
-      ) {
-
-        return;
-
-      }
-
-
-      const url =
-        createPostUrl(
-          state.currentMessage.text
-        );
-
-
-      window.open(
-        url,
-        "_blank"
-      );
-
-    }
-  );
-
-
-  return card;
-
-}
-
-
-/* =========================================================
-   CREATE REPLY CARD
-========================================================= */
-
-function createReplyCard(
-  tweet,
-  messages
-) {
-
-  const card =
-    document.createElement(
-      "div"
-    );
-
-
-  card.className =
-    "card";
-
-
-  const maskedId =
-    maskTweetId(
-      tweet.tweetId
-    );
-
-
-  card.innerHTML = `
-
-    <div class="card-header">
-
-      <div class="account">
-        @${escapeHtml(
-          tweet.accName
-        )}
-      </div>
-
-
-      <div class="tweet-id">
-        TW: ${maskedId}
-      </div>
-
-    </div>
-
-
-    <div class="message-box">
-
-      <span
-        class="message-text message-placeholder"
-      >
-        กดสุ่มข้อความ
-      </span>
-
-
-      <button
-        class="copy-btn"
-        type="button"
-      >
-        📋 Copy
-      </button>
-
-    </div>
-
-
-    <div class="actions">
-
-      <button
-        class="random-btn"
-        type="button"
-      >
-        🎲 สุ่มข้อความ
-      </button>
-
-
-      <button
-        class="reply-btn"
-        type="button"
-        disabled
-      >
-        Reply
-      </button>
-
-    </div>
-
-
-    <div class="remaining">
-
-      message ที่เหลือ:
-      <span class="remaining-count">
-        ${messages.length}/${messages.length}
-      </span>
-
-    </div>
-
-  `;
-
-
-  const messageText =
-    card.querySelector(
-      ".message-text"
-    );
-
-
-  const copyBtn =
-    card.querySelector(
-      ".copy-btn"
-    );
-
-
-  const randomBtn =
-    card.querySelector(
-      ".random-btn"
-    );
-
-
-  const replyBtn =
-    card.querySelector(
-      ".reply-btn"
-    );
-
-
-  const remainingCount =
-    card.querySelector(
-      ".remaining-count"
-    );
-
-
-  /*
-   * ======================================================
-   * STATE
-   * ======================================================
-   */
-
-  const state = {
-
-    tweetId:
-      tweet.tweetId,
-
-    messages,
-
-    currentMessage:
-      null,
-
-    remaining:
-      messages.length,
-
-    busy:
-      false
-
-  };
-
-
-  /*
-   * Initial
-   */
-  updateRemaining(
-    remainingCount,
-    state.remaining,
-    state.messages.length
-  );
-
-
-  /*
-   * ======================================================
-   * RANDOM
-   * ======================================================
-   */
-
-  randomBtn.addEventListener(
-    "click",
-    async () => {
-
-      await randomReply(
-        state,
-        messageText,
-        replyBtn,
-        remainingCount,
-        randomBtn
-      );
-
-    }
-  );
-
-
-  /*
-   * ======================================================
-   * COPY
-   * ======================================================
-   */
-
-  copyBtn.addEventListener(
-    "click",
-    async () => {
-
-      if (
-        !state.currentMessage
-      ) {
-
-        alert(
-          "กรุณาสุ่มข้อความก่อน"
-        );
-
-        return;
-
-      }
-
-
-      await copyText(
-        state.currentMessage.text
-      );
-
-    }
-  );
-
-
-  /*
-   * ======================================================
-   * REPLY
-   * ======================================================
-   */
-
-  replyBtn.addEventListener(
-    "click",
-    () => {
-
-      if (
-        !state.currentMessage
-      ) {
-
-        return;
-
-      }
-
-
-      const url =
-        createReplyUrl(
-          state.tweetId,
-          state.currentMessage.text
-        );
-
-
-      window.open(
-        url,
-        "_blank"
-      );
-
-    }
-  );
-
-
-  return card;
-
-}
-
-
-/* =========================================================
-   RANDOM POST
-========================================================= */
-
-async function randomPost(
-  state,
-  messageText,
-  postBtn,
-  remainingCount,
-  randomBtn
-) {
-
-  if (
-    state.busy
-  ) {
-
-    return;
-
-  }
-
-
-  state.busy =
-    true;
-
-
-  randomBtn.disabled =
-    true;
-
-
-  postBtn.disabled =
-    true;
-
-
-  try {
-
-    /*
-     * ====================================================
-     * GET CURRENT USED IDs
-     * ====================================================
-     */
-
-    const usedIds =
-      await getUsedPostMessageIds(
-        state.topic
+        }
       );
 
 
-    /*
-     * ====================================================
-     * FIND AVAILABLE
-     * ====================================================
-     */
+      /*
+       * ---------------------------------------------------
+       * POST TO X
+       * ---------------------------------------------------
+       */
 
-    const available =
-      state.messages.filter(
-        message => {
+      postBtn.addEventListener(
+        "click",
+        () => {
 
-          return !usedIds.has(
-            String(
-              message.messageId
-            )
+          if (
+            !state.currentMessage
+          ) {
+
+            return;
+
+          }
+
+
+          const url =
+            createPostUrl(
+              state.currentMessage.text
+            );
+
+
+          window.open(
+            url,
+            "_blank"
           );
 
         }
       );
 
 
-    /*
-     * ====================================================
-     * NO MESSAGE LEFT
-     * ====================================================
-     */
-
-    if (
-      available.length === 0
-    ) {
-
-      state.currentMessage =
-        null;
-
-
-      state.remaining =
-        0;
-
-
-      messageText.textContent =
-        "ข้อความหมดแล้ว";
-
-
-      messageText.classList.add(
-        "message-placeholder"
-      );
-
-
-      updateRemaining(
-        remainingCount,
-        0,
-        state.messages.length
-      );
-
-
-      return;
+      return card;
 
     }
 
 
-    /*
-     * ====================================================
-     * SHUFFLE
-     * ====================================================
-     */
+    /* =====================================================
+       CREATE REPLY CARD
+    ===================================================== */
 
-    shuffle(
-      available
-    );
-
-
-    /*
-     * ====================================================
-     * TRY TO CLAIM
-     * ====================================================
-     *
-     * ถ้ามีคนอื่น claim ไปก่อน
-     * RPC จะ return false
-     *
-     * เราจะลองข้อความถัดไป
-     */
-
-    for (
-      const message of available
+    async function createReplyCard(
+      topic,
+      tweet
     ) {
 
-      const claimed =
-        await claimPostMessage(
-          state.topic,
-          message.messageId
+      const tweetId =
+        tweet.tweetId;
+
+
+      /*
+       * Load R_<tweet_id>
+       */
+
+      const rows =
+        await loadChildSheet(
+          `R_${tweetId}`
+        );
+
+
+      const messages =
+        rows
+          .map(row => ({
+
+            messageId:
+              String(
+                row.message_id || ""
+              ).trim(),
+
+            tweetId:
+              String(
+                row.tweet_id || tweetId
+              ).trim(),
+
+            text:
+              normalizeText(
+                row.text || ""
+              )
+
+          }))
+          .filter(
+            row =>
+              row.messageId &&
+              row.text
+          );
+
+
+      const state = {
+
+        topic,
+
+        tweetId,
+
+        messages,
+
+        currentMessage: null,
+
+        remaining: messages.length,
+
+        isRandomizing: false
+
+      };
+
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "card";
+
+
+      card.innerHTML = `
+
+        <div class="card-header">
+
+          <div>
+
+            <div class="account">
+              @${escapeHtml(
+                tweet.accName || "-"
+              )}
+            </div>
+
+            <div class="tweet-id">
+              TW: ${maskTweetId(tweetId)}
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="remaining">
+          message ที่เหลือ:
+          <span class="remaining-count">
+            กำลังโหลด...
+          </span>
+        </div>
+
+
+        <div class="message-box">
+
+          <button
+            class="copy-btn"
+            type="button"
+          >
+            📋 Copy
+          </button>
+
+          <div class="message-text">
+            <span class="message-placeholder">
+              กด 🎲 สุ่มข้อความ
+            </span>
+          </div>
+
+        </div>
+
+
+        <div class="actions">
+
+          <button
+            class="random-btn"
+            type="button"
+          >
+            🎲 สุ่มข้อความ
+          </button>
+
+          <button
+            class="reply-btn"
+            type="button"
+            disabled
+          >
+            Reply
+          </button>
+
+        </div>
+
+      `;
+
+
+      const remainingCount =
+        card.querySelector(
+          ".remaining-count"
+        );
+
+      const messageText =
+        card.querySelector(
+          ".message-text"
+        );
+
+      const copyBtn =
+        card.querySelector(
+          ".copy-btn"
+        );
+
+      const randomBtn =
+        card.querySelector(
+          ".random-btn"
+        );
+
+      const replyBtn =
+        card.querySelector(
+          ".reply-btn"
         );
 
 
       /*
-       * Another user claimed it
-       */
-      if (
-        !claimed
-      ) {
-
-        continue;
-
-      }
-
-
-      /*
-       * ==================================================
-       * CLAIM SUCCESS
-       * ==================================================
+       * ---------------------------------------------------
+       * INITIAL GLOBAL COUNT
+       * ---------------------------------------------------
        */
 
-      state.currentMessage =
-        message;
-
-
-      messageText.textContent =
-        message.text;
-
-
-      messageText.classList.remove(
-        "message-placeholder"
+      initializeReplyRemaining(
+        state,
+        remainingCount
       );
 
 
-      postBtn.disabled =
-        false;
+      /*
+       * ---------------------------------------------------
+       * RANDOM
+       * ---------------------------------------------------
+       */
+
+      randomBtn.addEventListener(
+        "click",
+        async () => {
+
+          if (
+            state.isRandomizing
+          ) {
+
+            return;
+
+          }
+
+
+          state.isRandomizing =
+            true;
+
+          randomBtn.disabled =
+            true;
+
+
+          try {
+
+            const result =
+              await claimRandomReply(
+                state
+              );
+
+
+            if (!result) {
+
+              messageText.innerHTML = `
+                <span class="message-placeholder">
+                  ข้อความหมดแล้ว
+                </span>
+              `;
+
+              replyBtn.disabled =
+                true;
+
+              return;
+
+            }
+
+
+            state.currentMessage =
+              result;
+
+
+            messageText.textContent =
+              result.text;
+
+
+            replyBtn.disabled =
+              false;
+
+
+            /*
+             * Refresh count
+             */
+
+            await refreshReplyRemaining(
+              state,
+              remainingCount
+            );
+
+
+          } catch (error) {
+
+            console.error(error);
+
+            showError(
+              "สุ่มข้อความ REPLY ไม่สำเร็จ\n" +
+              error.message
+            );
+
+          } finally {
+
+            state.isRandomizing =
+              false;
+
+            randomBtn.disabled =
+              state.remaining <= 0;
+
+          }
+
+        }
+      );
 
 
       /*
-       * ==================================================
-       * GET GLOBAL COUNT AFTER CLAIM
-       * ==================================================
+       * ---------------------------------------------------
+       * COPY
+       * ---------------------------------------------------
        */
 
-      const usedAfterClaim =
+      copyBtn.addEventListener(
+        "click",
+        async () => {
+
+          if (
+            !state.currentMessage
+          ) {
+
+            return;
+
+          }
+
+
+          try {
+
+            await navigator.clipboard.writeText(
+              state.currentMessage.text
+            );
+
+
+            copyBtn.textContent =
+              "✓ Copied";
+
+
+            setTimeout(
+              () => {
+
+                copyBtn.textContent =
+                  "📋 Copy";
+
+              },
+              1000
+            );
+
+
+          } catch (error) {
+
+            console.error(error);
+
+            showError(
+              "Copy ไม่สำเร็จ"
+            );
+
+          }
+
+        }
+      );
+
+
+      /*
+       * ---------------------------------------------------
+       * REPLY TO X
+       * ---------------------------------------------------
+       */
+
+      replyBtn.addEventListener(
+        "click",
+        () => {
+
+          if (
+            !state.currentMessage
+          ) {
+
+            return;
+
+          }
+
+
+          const url =
+            createReplyUrl(
+              state.tweetId,
+              state.currentMessage.text
+            );
+
+
+          window.open(
+            url,
+            "_blank"
+          );
+
+        }
+      );
+
+
+      return card;
+
+    }
+
+
+    /* =====================================================
+       INITIAL POST COUNT
+    ===================================================== */
+
+    async function initializePostRemaining(
+      state,
+      remainingElement
+    ) {
+
+      try {
+
+        const usedIds =
+          await getUsedPostMessageIds(
+            state.topic
+          );
+
+
+        state.remaining =
+          Math.max(
+            state.messages.length -
+            usedIds.size,
+            0
+          );
+
+
+        updateRemaining(
+          remainingElement,
+          state.remaining,
+          state.messages.length
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "โหลดจำนวน POST ที่เหลือไม่สำเร็จ:",
+          error
+        );
+
+
+        /*
+         * ถ้า Supabase โหลดไม่ได้
+         * ไม่ควรโกหกว่าจำนวนเป็น total/total
+         */
+
+        remainingElement.textContent =
+          "โหลดไม่ได้";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       INITIAL REPLY COUNT
+    ===================================================== */
+
+    async function initializeReplyRemaining(
+      state,
+      remainingElement
+    ) {
+
+      try {
+
+        const usedIds =
+          await getUsedReplyMessageIds(
+            state.tweetId
+          );
+
+
+        state.remaining =
+          Math.max(
+            state.messages.length -
+            usedIds.size,
+            0
+          );
+
+
+        updateRemaining(
+          remainingElement,
+          state.remaining,
+          state.messages.length
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "โหลดจำนวน REPLY ที่เหลือไม่สำเร็จ:",
+          error
+        );
+
+
+        remainingElement.textContent =
+          "โหลดไม่ได้";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       REFRESH POST COUNT
+    ===================================================== */
+
+    async function refreshPostRemaining(
+      state,
+      remainingElement
+    ) {
+
+      const usedIds =
         await getUsedPostMessageIds(
           state.topic
         );
@@ -2019,275 +1428,30 @@ async function randomPost(
       state.remaining =
         Math.max(
           state.messages.length -
-          usedAfterClaim.size,
+          usedIds.size,
           0
         );
 
 
       updateRemaining(
-        remainingCount,
+        remainingElement,
         state.remaining,
         state.messages.length
       );
 
-
-      return;
-
     }
 
 
-    /*
-     * ====================================================
-     * ALL CANDIDATES WERE TAKEN
-     * ====================================================
-     */
+    /* =====================================================
+       REFRESH REPLY COUNT
+    ===================================================== */
 
-    state.currentMessage =
-      null;
-
-
-    state.remaining =
-      0;
-
-
-    messageText.textContent =
-      "ข้อความถูกใช้งานหมดแล้ว กรุณากดสุ่มใหม่";
-
-
-    messageText.classList.add(
-      "message-placeholder"
-    );
-
-
-    /*
-     * Query again to get actual global count
-     */
-    const finalUsedIds =
-      await getUsedPostMessageIds(
-        state.topic
-      );
-
-
-    state.remaining =
-      Math.max(
-        state.messages.length -
-        finalUsedIds.size,
-        0
-      );
-
-
-    updateRemaining(
-      remainingCount,
-      state.remaining,
-      state.messages.length
-    );
-
-  }
-
-  catch (error) {
-
-    console.error(
-      error
-    );
-
-
-    alert(
-      "สุ่มข้อความไม่สำเร็จ\n\n" +
-      error.message
-    );
-
-  }
-
-  finally {
-
-    state.busy =
-      false;
-
-
-    randomBtn.disabled =
-      false;
-
-  }
-
-}
-
-
-/* =========================================================
-   RANDOM REPLY
-========================================================= */
-
-async function randomReply(
-  state,
-  messageText,
-  replyBtn,
-  remainingCount,
-  randomBtn
-) {
-
-  if (
-    state.busy
-  ) {
-
-    return;
-
-  }
-
-
-  state.busy =
-    true;
-
-
-  randomBtn.disabled =
-    true;
-
-
-  replyBtn.disabled =
-    true;
-
-
-  try {
-
-    /*
-     * ====================================================
-     * GET CURRENT USED IDs
-     * ====================================================
-     */
-
-    const usedIds =
-      await getUsedReplyMessageIds(
-        state.tweetId
-      );
-
-
-    /*
-     * ====================================================
-     * FIND AVAILABLE
-     * ====================================================
-     */
-
-    const available =
-      state.messages.filter(
-        message => {
-
-          return !usedIds.has(
-            String(
-              message.messageId
-            )
-          );
-
-        }
-      );
-
-
-    /*
-     * ====================================================
-     * NO MESSAGE LEFT
-     * ====================================================
-     */
-
-    if (
-      available.length === 0
+    async function refreshReplyRemaining(
+      state,
+      remainingElement
     ) {
 
-      state.currentMessage =
-        null;
-
-
-      state.remaining =
-        0;
-
-
-      messageText.textContent =
-        "ข้อความหมดแล้ว";
-
-
-      messageText.classList.add(
-        "message-placeholder"
-      );
-
-
-      updateRemaining(
-        remainingCount,
-        0,
-        state.messages.length
-      );
-
-
-      return;
-
-    }
-
-
-    /*
-     * ====================================================
-     * SHUFFLE
-     * ====================================================
-     */
-
-    shuffle(
-      available
-    );
-
-
-    /*
-     * ====================================================
-     * ATOMIC CLAIM
-     * ====================================================
-     */
-
-    for (
-      const message of available
-    ) {
-
-      const claimed =
-        await claimReplyMessage(
-          state.tweetId,
-          message.messageId
-        );
-
-
-      /*
-       * Somebody else claimed it
-       */
-      if (
-        !claimed
-      ) {
-
-        continue;
-
-      }
-
-
-      /*
-       * ==================================================
-       * CLAIM SUCCESS
-       * ==================================================
-       */
-
-      state.currentMessage =
-        message;
-
-
-      messageText.textContent =
-        message.text;
-
-
-      messageText.classList.remove(
-        "message-placeholder"
-      );
-
-
-      replyBtn.disabled =
-        false;
-
-
-      /*
-       * ==================================================
-       * GET GLOBAL COUNT AFTER CLAIM
-       * ==================================================
-       */
-
-      const usedAfterClaim =
+      const usedIds =
         await getUsedReplyMessageIds(
           state.tweetId
         );
@@ -2296,672 +1460,885 @@ async function randomReply(
       state.remaining =
         Math.max(
           state.messages.length -
-          usedAfterClaim.size,
+          usedIds.size,
           0
         );
 
 
       updateRemaining(
-        remainingCount,
+        remainingElement,
         state.remaining,
         state.messages.length
       );
 
+    }
 
-      return;
+
+    /* =====================================================
+       GET USED POST MESSAGE IDS
+    ===================================================== */
+
+    async function getUsedPostMessageIds(
+      topic
+    ) {
+
+      const url =
+        SUPABASE_URL +
+        "/rest/v1/used_post_messages_v2" +
+        "?select=message_id" +
+        "&topic=eq." +
+        encodeURIComponent(topic);
+
+
+      const response =
+        await fetch(
+          url,
+          {
+            method: "GET",
+
+            headers: {
+              apikey:
+                SUPABASE_KEY,
+
+              Authorization:
+                `Bearer ${SUPABASE_KEY}`
+            }
+          }
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          `Supabase POST GET failed: ${response.status}`
+        );
+
+      }
+
+
+      const rows =
+        await response.json();
+
+
+      return new Set(
+        rows.map(
+          row =>
+            String(
+              row.message_id
+            ).trim()
+        )
+      );
 
     }
 
 
-    /*
-     * ====================================================
-     * EVERYTHING WAS TAKEN
-     * ====================================================
-     */
+    /* =====================================================
+       GET USED REPLY MESSAGE IDS
+    ===================================================== */
 
-    state.currentMessage =
-      null;
+    async function getUsedReplyMessageIds(
+      tweetId
+    ) {
 
-
-    messageText.textContent =
-      "ข้อความถูกใช้งานหมดแล้ว กรุณากดสุ่มใหม่";
-
-
-    messageText.classList.add(
-      "message-placeholder"
-    );
+      const url =
+        SUPABASE_URL +
+        "/rest/v1/used_reply_messages_v2" +
+        "?select=message_id" +
+        "&tweet_id=eq." +
+        encodeURIComponent(tweetId);
 
 
-    /*
-     * Query again
-     */
-    const finalUsedIds =
-      await getUsedReplyMessageIds(
-        state.tweetId
+      const response =
+        await fetch(
+          url,
+          {
+            method: "GET",
+
+            headers: {
+              apikey:
+                SUPABASE_KEY,
+
+              Authorization:
+                `Bearer ${SUPABASE_KEY}`
+            }
+          }
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          `Supabase REPLY GET failed: ${response.status}`
+        );
+
+      }
+
+
+      const rows =
+        await response.json();
+
+
+      return new Set(
+        rows.map(
+          row =>
+            String(
+              row.message_id
+            ).trim()
+        )
       );
 
+    }
 
-    state.remaining =
-      Math.max(
-        state.messages.length -
-        finalUsedIds.size,
-        0
+
+    /* =====================================================
+       CLAIM RANDOM POST
+    ===================================================== */
+
+    async function claimRandomPost(
+      state
+    ) {
+
+      /*
+       * Get globally used messages
+       */
+
+      let usedIds =
+        await getUsedPostMessageIds(
+          state.topic
+        );
+
+
+      /*
+       * Candidate messages
+       */
+
+      let available =
+        state.messages.filter(
+          message =>
+            !usedIds.has(
+              message.messageId
+            )
+        );
+
+
+      /*
+       * No messages
+       */
+
+      if (
+        available.length === 0
+      ) {
+
+        state.remaining = 0;
+
+        return null;
+
+      }
+
+
+      /*
+       * Shuffle candidates
+       */
+
+      shuffle(available);
+
+
+      /*
+       * Try claiming one by one.
+       *
+       * If another user claimed it
+       * at the same time, claim returns false.
+       * Then try another candidate.
+       */
+
+      for (
+        const message of available
+      ) {
+
+        const success =
+          await claimPostMessage(
+            state.topic,
+            message.messageId
+          );
+
+
+        if (success) {
+
+          return message;
+
+        }
+
+
+        /*
+         * Someone else claimed it.
+         * Remove and retry.
+         */
+
+        usedIds.add(
+          message.messageId
+        );
+
+      }
+
+
+      /*
+       * Everything was claimed
+       */
+
+      state.remaining = 0;
+
+      return null;
+
+    }
+
+
+    /* =====================================================
+       CLAIM RANDOM REPLY
+    ===================================================== */
+
+    async function claimRandomReply(
+      state
+    ) {
+
+      let usedIds =
+        await getUsedReplyMessageIds(
+          state.tweetId
+        );
+
+
+      let available =
+        state.messages.filter(
+          message =>
+            !usedIds.has(
+              message.messageId
+            )
+        );
+
+
+      if (
+        available.length === 0
+      ) {
+
+        state.remaining = 0;
+
+        return null;
+
+      }
+
+
+      shuffle(available);
+
+
+      for (
+        const message of available
+      ) {
+
+        const success =
+          await claimReplyMessage(
+            state.tweetId,
+            message.messageId
+          );
+
+
+        if (success) {
+
+          return message;
+
+        }
+
+
+        usedIds.add(
+          message.messageId
+        );
+
+      }
+
+
+      state.remaining = 0;
+
+      return null;
+
+    }
+
+
+    /* =====================================================
+       CLAIM POST MESSAGE
+    ===================================================== */
+
+    async function claimPostMessage(
+      topic,
+      messageId
+    ) {
+
+      const response =
+        await fetch(
+          SUPABASE_URL +
+          "/rest/v1/rpc/claim_post_message_v2",
+          {
+            method: "POST",
+
+            headers: {
+              apikey:
+                SUPABASE_KEY,
+
+              Authorization:
+                `Bearer ${SUPABASE_KEY}`,
+
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+
+              p_topic:
+                topic,
+
+              p_message_id:
+                messageId
+
+            })
+          }
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          `Claim POST failed: ${response.status}`
+        );
+
+      }
+
+
+      return await response.json();
+
+    }
+
+
+    /* =====================================================
+       CLAIM REPLY MESSAGE
+    ===================================================== */
+
+    async function claimReplyMessage(
+      tweetId,
+      messageId
+    ) {
+
+      const response =
+        await fetch(
+          SUPABASE_URL +
+          "/rest/v1/rpc/claim_reply_message_v2",
+          {
+            method: "POST",
+
+            headers: {
+              apikey:
+                SUPABASE_KEY,
+
+              Authorization:
+                `Bearer ${SUPABASE_KEY}`,
+
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+
+              p_tweet_id:
+                tweetId,
+
+              p_message_id:
+                messageId
+
+            })
+          }
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          `Claim REPLY failed: ${response.status}`
+        );
+
+      }
+
+
+      return await response.json();
+
+    }
+
+
+    /* =====================================================
+       LOAD CHILD SHEET
+    ===================================================== */
+
+    async function loadChildSheet(
+      sheetName
+    ) {
+
+      const url =
+        `https://docs.google.com/spreadsheets/d/` +
+        `${SPREADSHEET_ID}/gviz/tq` +
+        `?sheet=${encodeURIComponent(sheetName)}` +
+        `&tqx=out:csv`;
+
+
+      const response =
+        await fetch(url);
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          `โหลด sheet ${sheetName} ไม่สำเร็จ: ${response.status}`
+        );
+
+      }
+
+
+      const csvText =
+        await response.text();
+
+
+      return parseCSV(
+        csvText
       );
 
-
-    updateRemaining(
-      remainingCount,
-      state.remaining,
-      state.messages.length
-    );
-
-  }
-
-  catch (error) {
-
-    console.error(
-      error
-    );
+    }
 
 
-    alert(
-      "สุ่มข้อความไม่สำเร็จ\n\n" +
-      error.message
-    );
+    /* =====================================================
+       CSV PARSER
+    ===================================================== */
 
-  }
+    function parseCSV(
+      csv
+    ) {
 
-  finally {
+      const rows = [];
 
-    state.busy =
-      false;
+      let row = [];
 
+      let field = "";
 
-    randomBtn.disabled =
-      false;
-
-  }
-
-}
+      let insideQuotes = false;
 
 
-/* =========================================================
-   GET USED POST IDs
-========================================================= */
+      for (
+        let i = 0;
+        i < csv.length;
+        i++
+      ) {
 
-async function getUsedPostMessageIds(
-  topic
-) {
-
-  const url =
-    SUPABASE_URL +
-    "/rest/v1/used_post_messages_v2" +
-    "?select=message_id" +
-    "&topic=eq." +
-    encodeURIComponent(
-      topic
-    );
+        const char =
+          csv[i];
 
 
-  const response =
-    await fetch(
-      url,
-      {
-        method: "GET",
+        const next =
+          csv[i + 1];
 
-        headers: {
 
-          apikey:
-            SUPABASE_KEY,
+        if (
+          char === '"'
+        ) {
 
-          Authorization:
-            "Bearer " +
-            SUPABASE_KEY
+          if (
+            insideQuotes &&
+            next === '"'
+          ) {
+
+            field += '"';
+
+            i++;
+
+          } else {
+
+            insideQuotes =
+              !insideQuotes;
+
+          }
+
+        } else if (
+          char === "," &&
+          !insideQuotes
+        ) {
+
+          row.push(field);
+
+          field = "";
+
+        } else if (
+          (char === "\n" ||
+           char === "\r") &&
+          !insideQuotes
+        ) {
+
+          if (
+            char === "\r" &&
+            next === "\n"
+          ) {
+
+            i++;
+
+          }
+
+
+          row.push(field);
+
+          rows.push(row);
+
+          row = [];
+
+          field = "";
+
+        } else {
+
+          field += char;
 
         }
 
       }
-    );
 
 
-  if (
-    !response.ok
-  ) {
+      /*
+       * Last field
+       */
 
-    const text =
-      await response.text();
+      if (
+        field !== "" ||
+        row.length > 0
+      ) {
 
+        row.push(field);
 
-    throw new Error(
-      "โหลด used POST messages ไม่สำเร็จ: " +
-      text
-    );
-
-  }
-
-
-  const rows =
-    await response.json();
-
-
-  return new Set(
-
-    rows.map(
-      row =>
-        String(
-          row.message_id
-        )
-    )
-
-  );
-
-}
-
-
-/* =========================================================
-   GET USED REPLY IDs
-========================================================= */
-
-async function getUsedReplyMessageIds(
-  tweetId
-) {
-
-  const url =
-    SUPABASE_URL +
-    "/rest/v1/used_reply_messages_v2" +
-    "?select=message_id" +
-    "&tweet_id=eq." +
-    encodeURIComponent(
-      tweetId
-    );
-
-
-  const response =
-    await fetch(
-      url,
-      {
-        method: "GET",
-
-        headers: {
-
-          apikey:
-            SUPABASE_KEY,
-
-          Authorization:
-            "Bearer " +
-            SUPABASE_KEY
-
-        }
+        rows.push(row);
 
       }
-    );
 
 
-  if (
-    !response.ok
-  ) {
+      if (
+        rows.length === 0
+      ) {
 
-    const text =
-      await response.text();
+        return [];
 
-
-    throw new Error(
-      "โหลด used REPLY messages ไม่สำเร็จ: " +
-      text
-    );
-
-  }
+      }
 
 
-  const rows =
-    await response.json();
+      /*
+       * Header
+       */
+
+      const headers =
+        rows[0].map(
+          header =>
+            normalizeHeader(
+              header
+            )
+        );
 
 
-  return new Set(
+      /*
+       * Convert rows to objects
+       */
 
-    rows.map(
-      row =>
-        String(
-          row.message_id
+      return rows
+        .slice(1)
+        .filter(
+          row =>
+            row.some(
+              value =>
+                String(
+                  value || ""
+                ).trim() !== ""
+            )
         )
-    )
+        .map(row => {
 
-  );
-
-}
+          const obj = {};
 
 
-/* =========================================================
-   CLAIM POST
-========================================================= */
+          headers.forEach(
+            (header, index) => {
 
-async function claimPostMessage(
-  topic,
-  messageId
-) {
+              if (!header) {
 
-  const response =
-    await fetch(
-      SUPABASE_URL +
-      "/rest/v1/rpc/claim_post_message_v2",
-      {
+                return;
 
-        method: "POST",
-
-        headers: {
-
-          apikey:
-            SUPABASE_KEY,
-
-          Authorization:
-            "Bearer " +
-            SUPABASE_KEY,
-
-          "Content-Type":
-            "application/json"
-
-        },
-
-        body:
-          JSON.stringify({
-
-            p_topic:
-              topic,
-
-            p_message_id:
-              String(
-                messageId
-              )
-
-          })
-
-        }
-      );
+              }
 
 
-  if (
-    !response.ok
-  ) {
+              obj[header] =
+                String(
+                  row[index] || ""
+                ).trim();
 
-    const text =
-      await response.text();
+            }
+          );
 
 
-    throw new Error(
-      "Claim POST ไม่สำเร็จ: " +
+          return obj;
+
+        });
+
+    }
+
+
+    /* =====================================================
+       NORMALIZE HEADER
+    ===================================================== */
+
+    function normalizeHeader(
+      value
+    ) {
+
+      return String(
+        value || ""
+      )
+        .replace(
+          /^\uFEFF/,
+          ""
+        )
+        .trim()
+        .toLowerCase()
+        .replace(
+          /\s+/g,
+          "_"
+        );
+
+    }
+
+
+    /* =====================================================
+       NORMALIZE TEXT
+    ===================================================== */
+
+    function normalizeText(
       text
-    );
+    ) {
 
-  }
+      return String(
+        text || ""
+      )
 
+        .replace(
+          /<br\s*\/?>/gi,
+          "\n"
+        )
 
-  return await response.json();
+        .replace(
+          /<\/p>\s*<p>/gi,
+          "\n"
+        )
 
-}
+        .replace(
+          /<[^>]*>/g,
+          ""
+        )
 
+        .replace(
+          /&nbsp;/gi,
+          " "
+        )
 
-/* =========================================================
-   CLAIM REPLY
-========================================================= */
+        .replace(
+          /&amp;/gi,
+          "&"
+        )
 
-async function claimReplyMessage(
-  tweetId,
-  messageId
-) {
+        .replace(
+          /&lt;/gi,
+          "<"
+        )
 
-  const response =
-    await fetch(
-      SUPABASE_URL +
-      "/rest/v1/rpc/claim_reply_message_v2",
-      {
+        .replace(
+          /&gt;/gi,
+          ">"
+        )
 
-        method: "POST",
+        .trim();
 
-        headers: {
-
-          apikey:
-            SUPABASE_KEY,
-
-          Authorization:
-            "Bearer " +
-            SUPABASE_KEY,
-
-          "Content-Type":
-            "application/json"
-
-        },
-
-        body:
-          JSON.stringify({
-
-            p_tweet_id:
-              String(
-                tweetId
-              ),
-
-            p_message_id:
-              String(
-                messageId
-              )
-
-          })
-
-        }
-      );
+    }
 
 
-  if (
-    !response.ok
-  ) {
+    /* =====================================================
+       UPDATE REMAINING
+    ===================================================== */
 
-    const text =
-      await response.text();
+    function updateRemaining(
+      element,
+      remaining,
+      total
+    ) {
 
+      element.textContent =
+        `${remaining}/${total}`;
 
-    throw new Error(
-      "Claim REPLY ไม่สำเร็จ: " +
-      text
-    );
-
-  }
-
-
-  return await response.json();
-
-}
+    }
 
 
-/* =========================================================
-   X POST URL
-========================================================= */
+    /* =====================================================
+       MASK TWEET ID
+    ===================================================== */
 
-function createPostUrl(
-  text
-) {
-
-  return (
-    "https://x.com/intent/post" +
-    "?text=" +
-    encodeURIComponent(
-      text
-    )
-  );
-
-}
-
-
-/* =========================================================
-   X REPLY URL
-========================================================= */
-
-function createReplyUrl(
-  tweetId,
-  text
-) {
-
-  return (
-    "https://x.com/intent/tweet" +
-    "?in_reply_to=" +
-    encodeURIComponent(
+    function maskTweetId(
       tweetId
-    ) +
-    "&text=" +
-    encodeURIComponent(
-      text
-    )
-  );
+    ) {
 
-}
+      const value =
+        String(tweetId);
 
 
-/* =========================================================
-   COPY
-========================================================= */
+      if (
+        value.length <= 4
+      ) {
 
-async function copyText(
-  text
-) {
+        return "••••";
 
-  try {
-
-    await navigator.clipboard.writeText(
-      text
-    );
+      }
 
 
-    alert(
-      "Copy แล้ว"
-    );
-
-  }
-
-  catch (error) {
-
-    /*
-     * Fallback
-     */
-    const textarea =
-      document.createElement(
-        "textarea"
+      return (
+        "••••••••" +
+        value.slice(-4)
       );
 
-
-    textarea.value =
-      text;
+    }
 
 
-    textarea.style.position =
-      "fixed";
+    /* =====================================================
+       X POST URL
+    ===================================================== */
 
+    function createPostUrl(
+      text
+    ) {
 
-    textarea.style.opacity =
-      "0";
-
-
-    document.body.appendChild(
-      textarea
-    );
-
-
-    textarea.focus();
-
-    textarea.select();
-
-
-    document.execCommand(
-      "copy"
-    );
-
-
-    textarea.remove();
-
-
-    alert(
-      "Copy แล้ว"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   MASK TWEET ID
-========================================================= */
-
-function maskTweetId(
-  tweetId
-) {
-
-  const id =
-    String(
-      tweetId
-    );
-
-
-  if (
-    id.length <= 4
-  ) {
-
-    return (
-      "••••" +
-      id
-    );
-
-  }
-
-
-  return (
-    "••••••••" +
-    id.slice(-4)
-  );
-
-}
-
-
-/* =========================================================
-   SHUFFLE
-========================================================= */
-
-function shuffle(
-  array
-) {
-
-  for (
-    let i = array.length - 1;
-    i > 0;
-    i--
-  ) {
-
-    const j =
-      Math.floor(
-        Math.random() *
-        (i + 1)
+      return (
+        "https://x.com/intent/post" +
+        "?text=" +
+        encodeURIComponent(text)
       );
 
-
-    [
-      array[i],
-      array[j]
-    ] =
-    [
-      array[j],
-      array[i]
-    ];
-
-  }
+    }
 
 
-  return array;
+    /* =====================================================
+       X REPLY URL
+    ===================================================== */
 
-}
+    function createReplyUrl(
+      tweetId,
+      text
+    ) {
 
+      return (
+        "https://x.com/intent/tweet" +
+        "?in_reply_to=" +
+        encodeURIComponent(tweetId) +
+        "&text=" +
+        encodeURIComponent(text)
+      );
 
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHtml(
-  value
-) {
-
-  return String(
-    value
-  )
-
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
-
-}
+    }
 
 
-/* =========================================================
-   UPDATE REMAINING
-========================================================= */
+    /* =====================================================
+       SHUFFLE
+    ===================================================== */
 
-function updateRemaining(
-  element,
-  remaining,
-  total
-) {
+    function shuffle(
+      array
+    ) {
 
-  element.textContent =
-    `${remaining}/${total}`;
+      for (
+        let i = array.length - 1;
+        i > 0;
+        i--
+      ) {
 
-}
-
-
-/* =========================================================
-   EMPTY
-========================================================= */
-
-function createEmpty(
-  message
-) {
-
-  const element =
-    document.createElement(
-      "div"
-    );
+        const j =
+          Math.floor(
+            Math.random() *
+            (i + 1)
+          );
 
 
-  element.className =
-    "empty";
+        [
+          array[i],
+          array[j]
+        ] = [
+          array[j],
+          array[i]
+        ];
+
+      }
 
 
-  element.textContent =
-    message;
+      return array;
+
+    }
 
 
-  return element;
+    /* =====================================================
+       ESCAPE HTML
+    ===================================================== */
 
-}
+    function escapeHtml(
+      value
+    ) {
+
+      return String(
+        value || ""
+      )
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
 
 
-/* =========================================================
-   STATUS
-========================================================= */
+    /* =====================================================
+       ERROR
+    ===================================================== */
 
-function setStatus(
-  message,
-  isError = false
-) {
+    function showError(
+      message
+    ) {
 
-  statusEl.textContent =
-    message;
+      errorContainer.innerHTML =
+        `<div class="error">
+          ${escapeHtml(message)}
+        </div>`;
+
+    }
 
 
-  statusEl.className =
-    isError
-      ? "status error"
-      : "status";
+    function clearError() {
 
-}
+      errorContainer.innerHTML = "";
 
-</script>
+    }
+
+  </script>
 
 </body>
-
 </html>
