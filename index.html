@@ -49,17 +49,33 @@
     }
 
     .section-title {
-      margin-top: 28px;
+      margin-top: 0;
       margin-bottom: 12px;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
+    }
+
+    .section-block {
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .post-section {
+      background: #e2f0ff;
+      border: 1px solid #c4dcf7;
+    }
+
+    .reply-section {
+      background: #f8fcf4;
+      border: 1px solid #e7f0dd;
     }
 
     .card {
       background: white;
       border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
@@ -92,16 +108,17 @@
       background: #f7f7f7;
       border: 1px solid #ddd;
       border-radius: 10px;
-      padding: 14px;
-      min-height: 100px;
+      padding: 10px;
+      min-height: 72px;
       white-space: pre-wrap;
       word-break: break-word;
-      line-height: 1.5;
+      line-height: 1.35;
       margin-bottom: 12px;
     }
 
     .message-placeholder {
       color: #999;
+      font-size: 13px;
     }
 
     .copy-btn {
@@ -123,6 +140,7 @@
 
     .message-text {
       padding-right: 55px;
+      font-size: 14px;
     }
 
     .actions {
@@ -134,9 +152,9 @@
     button {
       border: none;
       border-radius: 9px;
-      padding: 10px 15px;
+      padding: 8px 12px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
     }
 
@@ -182,10 +200,11 @@
 
     .empty {
       background: white;
-      padding: 20px;
+      padding: 14px;
       border-radius: 12px;
       color: #777;
       text-align: center;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -446,6 +465,20 @@
       content.innerHTML = "";
 
 
+      const postSection =
+        document.createElement("section");
+
+      postSection.className =
+        "section-block post-section";
+
+
+      const replySection =
+        document.createElement("section");
+
+      replySection.className =
+        "section-block reply-section";
+
+
       /*
        * POST SECTION
        */
@@ -459,7 +492,7 @@
       postTitle.textContent =
         "POST";
 
-      content.appendChild(
+      postSection.appendChild(
         postTitle
       );
 
@@ -475,7 +508,7 @@
         empty.textContent =
           "ไม่พบข้อความ POST";
 
-        content.appendChild(
+        postSection.appendChild(
           empty
         );
 
@@ -487,7 +520,7 @@
             postRows
           );
 
-        content.appendChild(
+        postSection.appendChild(
           postCard
         );
 
@@ -507,7 +540,7 @@
       replyTitle.textContent =
         "REPLY";
 
-      content.appendChild(
+      replySection.appendChild(
         replyTitle
       );
 
@@ -523,7 +556,7 @@
         empty.textContent =
           "ไม่พบ Tweet สำหรับ REPLY";
 
-        content.appendChild(
+        replySection.appendChild(
           empty
         );
 
@@ -539,13 +572,22 @@
               tweet
             );
 
-          content.appendChild(
+          replySection.appendChild(
             card
           );
 
         }
 
       }
+
+
+      content.appendChild(
+        postSection
+      );
+
+      content.appendChild(
+        replySection
+      );
 
     }
 
