@@ -17,6 +17,7 @@
       box-sizing: border-box;
     }
 
+
     body {
       margin: 0;
       padding: 24px;
@@ -452,24 +453,35 @@
 
 
 /*
- * main sheet CSV URL
+ * ========================================================
+ * MAIN SHEET CSV URL
+ * ========================================================
  *
- * ตัวอย่าง:
- * https://docs.google.com/spreadsheets/d/XXXX/gviz/tq?tqx=out:csv&sheet=main
+ * main sheet ต้องมี column:
+ *
+ * Topic
+ * acc_name
+ * link_post
+ * tweet_id
+ *
  */
 const MAIN_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-CnwPK2fSRjsBrmWn3XVIXZEbDFPGguJQeco7B4nNv-7YOcxmIk0ge1846CC5OB8o3sqWK7TwIo_a/pub?output=csv";
 
 
 /*
- * Google Spreadsheet ID
+ * ========================================================
+ * GOOGLE SPREADSHEET ID
+ * ========================================================
  */
 const SPREADSHEET_ID =
   "1RJ7OzLLgvMSKdVTxVfKOqQXir7vXIIyWpa_gImp1PzM";
 
 
 /*
- * Supabase
+ * ========================================================
+ * SUPABASE
+ * ========================================================
  */
 const SUPABASE_URL =
   "https://romrjbyaqckrpvobbzkw.supabase.co";
@@ -478,7 +490,7 @@ const SUPABASE_URL =
 /*
  * ใช้ Publishable / anon key เท่านั้น
  *
- * ห้ามใส่ service_role key
+ * ห้ามใช้ service_role key
  */
 const SUPABASE_KEY =
   "sb_publishable_4DN0Penjs0vuTYzVdY4-Ug_AmsxurCE";
@@ -676,7 +688,6 @@ async function loadSheet(
 
     })
 
-
     .filter(row => {
 
       return (
@@ -719,7 +730,7 @@ function parseCSV(csv) {
 
 
     /*
-     * escaped quote:
+     * Escaped quote:
      * ""
      */
     if (
@@ -733,11 +744,12 @@ function parseCSV(csv) {
       i++;
 
       continue;
+
     }
 
 
     /*
-     * quote
+     * Quote
      */
     if (char === '"') {
 
@@ -745,11 +757,12 @@ function parseCSV(csv) {
         !insideQuotes;
 
       continue;
+
     }
 
 
     /*
-     * comma
+     * Comma
      */
     if (
       char === "," &&
@@ -761,11 +774,12 @@ function parseCSV(csv) {
       value = "";
 
       continue;
+
     }
 
 
     /*
-     * newline
+     * Newline
      */
     if (
       (
@@ -795,6 +809,7 @@ function parseCSV(csv) {
       value = "";
 
       continue;
+
     }
 
 
@@ -905,7 +920,7 @@ function normalizeText(
     )
 
     /*
-     * remove remaining HTML tags
+     * Remove remaining HTML tags
      */
     .replace(
       /<[^>]*>/g,
@@ -1057,9 +1072,9 @@ topicSelect.addEventListener(
 async function renderTopic() {
 
   /*
-   * =========================
+   * ======================================================
    * POST
-   * =========================
+   * ======================================================
    */
 
   const postTitle =
@@ -1139,9 +1154,9 @@ async function renderTopic() {
 
 
   /*
-   * =========================
+   * ======================================================
    * REPLY
-   * =========================
+   * ======================================================
    */
 
   const replyTitle =
@@ -1327,6 +1342,13 @@ function createPostCard(
     "card";
 
 
+  /*
+   * IMPORTANT:
+   *
+   * ห้ามใช้ state ใน innerHTML
+   * ก่อน state จะถูกสร้าง
+   */
+
   card.innerHTML = `
 
     <div class="card-header">
@@ -1378,9 +1400,14 @@ function createPostCard(
     </div>
 
 
-<div class="remaining" id="post-remaining">
-  message ที่เหลือ: ${state.messages.length}/${state.messages.length}
-</div>
+    <div class="remaining">
+
+      message ที่เหลือ:
+      <span class="remaining-count">
+        ${messages.length}/${messages.length}
+      </span>
+
+    </div>
 
   `;
 
@@ -1416,8 +1443,11 @@ function createPostCard(
 
 
   /*
-   * Local card state
+   * ======================================================
+   * LOCAL CARD STATE
+   * ======================================================
    */
+
   const state = {
 
     topic,
@@ -1437,20 +1467,30 @@ function createPostCard(
 
 
   /*
-   * Initial count
+   * ======================================================
+   * INITIAL GLOBAL COUNT
+   * ======================================================
    *
-   * ตรงนี้เป็นจำนวนข้อความใน Sheet
-   * ก่อนที่จะเช็ค used จริง
+   * ตอน render ยังไม่ query Supabase
+   * จึงแสดง total/total ก่อน
+   *
+   * เช่น:
+   * 3/3
    */
+
   updateRemaining(
     remainingCount,
-    state.remaining
+    state.remaining,
+    state.messages.length
   );
 
 
   /*
+   * ======================================================
    * RANDOM
+   * ======================================================
    */
+
   randomBtn.addEventListener(
     "click",
     async () => {
@@ -1468,8 +1508,11 @@ function createPostCard(
 
 
   /*
+   * ======================================================
    * COPY
+   * ======================================================
    */
+
   copyBtn.addEventListener(
     "click",
     async () => {
@@ -1496,8 +1539,11 @@ function createPostCard(
 
 
   /*
+   * ======================================================
    * POST
+   * ======================================================
    */
+
   postBtn.addEventListener(
     "click",
     () => {
@@ -1618,7 +1664,7 @@ function createReplyCard(
 
       message ที่เหลือ:
       <span class="remaining-count">
-        -
+        ${messages.length}/${messages.length}
       </span>
 
     </div>
@@ -1656,6 +1702,12 @@ function createReplyCard(
     );
 
 
+  /*
+   * ======================================================
+   * STATE
+   * ======================================================
+   */
+
   const state = {
 
     tweetId:
@@ -1675,15 +1727,22 @@ function createReplyCard(
   };
 
 
+  /*
+   * Initial
+   */
   updateRemaining(
     remainingCount,
-    state.remaining
+    state.remaining,
+    state.messages.length
   );
 
 
   /*
+   * ======================================================
    * RANDOM
+   * ======================================================
    */
+
   randomBtn.addEventListener(
     "click",
     async () => {
@@ -1701,8 +1760,11 @@ function createReplyCard(
 
 
   /*
+   * ======================================================
    * COPY
+   * ======================================================
    */
+
   copyBtn.addEventListener(
     "click",
     async () => {
@@ -1729,8 +1791,11 @@ function createReplyCard(
 
 
   /*
+   * ======================================================
    * REPLY
+   * ======================================================
    */
+
   replyBtn.addEventListener(
     "click",
     () => {
@@ -1777,25 +1842,35 @@ async function randomPost(
   randomBtn
 ) {
 
-  if (state.busy) {
+  if (
+    state.busy
+  ) {
 
     return;
 
   }
 
 
-  state.busy = true;
+  state.busy =
+    true;
 
-  randomBtn.disabled = true;
 
-  postBtn.disabled = true;
+  randomBtn.disabled =
+    true;
+
+
+  postBtn.disabled =
+    true;
 
 
   try {
 
     /*
-     * Get already-used IDs
+     * ====================================================
+     * GET CURRENT USED IDs
+     * ====================================================
      */
+
     const usedIds =
       await getUsedPostMessageIds(
         state.topic
@@ -1803,8 +1878,11 @@ async function randomPost(
 
 
     /*
-     * Remove used messages
+     * ====================================================
+     * FIND AVAILABLE
+     * ====================================================
      */
+
     const available =
       state.messages.filter(
         message => {
@@ -1819,6 +1897,12 @@ async function randomPost(
       );
 
 
+    /*
+     * ====================================================
+     * NO MESSAGE LEFT
+     * ====================================================
+     */
+
     if (
       available.length === 0
     ) {
@@ -1826,7 +1910,9 @@ async function randomPost(
       state.currentMessage =
         null;
 
-      state.remaining = 0;
+
+      state.remaining =
+        0;
 
 
       messageText.textContent =
@@ -1840,7 +1926,8 @@ async function randomPost(
 
       updateRemaining(
         remainingCount,
-        0
+        0,
+        state.messages.length
       );
 
 
@@ -1850,14 +1937,27 @@ async function randomPost(
 
 
     /*
-     * Shuffle
+     * ====================================================
+     * SHUFFLE
+     * ====================================================
      */
-    shuffle(available);
+
+    shuffle(
+      available
+    );
 
 
     /*
-     * Try each candidate
+     * ====================================================
+     * TRY TO CLAIM
+     * ====================================================
+     *
+     * ถ้ามีคนอื่น claim ไปก่อน
+     * RPC จะ return false
+     *
+     * เราจะลองข้อความถัดไป
      */
+
     for (
       const message of available
     ) {
@@ -1870,9 +1970,11 @@ async function randomPost(
 
 
       /*
-       * Another user already claimed it
+       * Another user claimed it
        */
-      if (!claimed) {
+      if (
+        !claimed
+      ) {
 
         continue;
 
@@ -1880,18 +1982,13 @@ async function randomPost(
 
 
       /*
-       * Success
+       * ==================================================
+       * CLAIM SUCCESS
+       * ==================================================
        */
+
       state.currentMessage =
         message;
-
-
-      /*
-       * จำนวนที่เหลือ
-       * หลังจากข้อความนี้ถูก claim
-       */
-      state.remaining =
-        available.length - 1;
 
 
       messageText.textContent =
@@ -1907,9 +2004,30 @@ async function randomPost(
         false;
 
 
+      /*
+       * ==================================================
+       * GET GLOBAL COUNT AFTER CLAIM
+       * ==================================================
+       */
+
+      const usedAfterClaim =
+        await getUsedPostMessageIds(
+          state.topic
+        );
+
+
+      state.remaining =
+        Math.max(
+          state.messages.length -
+          usedAfterClaim.size,
+          0
+        );
+
+
       updateRemaining(
         remainingCount,
-        state.remaining
+        state.remaining,
+        state.messages.length
       );
 
 
@@ -1919,13 +2037,17 @@ async function randomPost(
 
 
     /*
-     * All candidates were taken
+     * ====================================================
+     * ALL CANDIDATES WERE TAKEN
+     * ====================================================
      */
+
     state.currentMessage =
       null;
 
 
-    state.remaining = 0;
+    state.remaining =
+      0;
 
 
     messageText.textContent =
@@ -1937,16 +2059,36 @@ async function randomPost(
     );
 
 
+    /*
+     * Query again to get actual global count
+     */
+    const finalUsedIds =
+      await getUsedPostMessageIds(
+        state.topic
+      );
+
+
+    state.remaining =
+      Math.max(
+        state.messages.length -
+        finalUsedIds.size,
+        0
+      );
+
+
     updateRemaining(
       remainingCount,
-      0
+      state.remaining,
+      state.messages.length
     );
 
   }
 
   catch (error) {
 
-    console.error(error);
+    console.error(
+      error
+    );
 
 
     alert(
@@ -1960,6 +2102,7 @@ async function randomPost(
 
     state.busy =
       false;
+
 
     randomBtn.disabled =
       false;
@@ -1981,25 +2124,35 @@ async function randomReply(
   randomBtn
 ) {
 
-  if (state.busy) {
+  if (
+    state.busy
+  ) {
 
     return;
 
   }
 
 
-  state.busy = true;
+  state.busy =
+    true;
 
-  randomBtn.disabled = true;
 
-  replyBtn.disabled = true;
+  randomBtn.disabled =
+    true;
+
+
+  replyBtn.disabled =
+    true;
 
 
   try {
 
     /*
-     * Get used IDs
+     * ====================================================
+     * GET CURRENT USED IDs
+     * ====================================================
      */
+
     const usedIds =
       await getUsedReplyMessageIds(
         state.tweetId
@@ -2007,8 +2160,11 @@ async function randomReply(
 
 
     /*
-     * Remove used
+     * ====================================================
+     * FIND AVAILABLE
+     * ====================================================
      */
+
     const available =
       state.messages.filter(
         message => {
@@ -2023,6 +2179,12 @@ async function randomReply(
       );
 
 
+    /*
+     * ====================================================
+     * NO MESSAGE LEFT
+     * ====================================================
+     */
+
     if (
       available.length === 0
     ) {
@@ -2030,7 +2192,9 @@ async function randomReply(
       state.currentMessage =
         null;
 
-      state.remaining = 0;
+
+      state.remaining =
+        0;
 
 
       messageText.textContent =
@@ -2044,7 +2208,8 @@ async function randomReply(
 
       updateRemaining(
         remainingCount,
-        0
+        0,
+        state.messages.length
       );
 
 
@@ -2054,14 +2219,22 @@ async function randomReply(
 
 
     /*
-     * Shuffle
+     * ====================================================
+     * SHUFFLE
+     * ====================================================
      */
-    shuffle(available);
+
+    shuffle(
+      available
+    );
 
 
     /*
-     * Atomic claim
+     * ====================================================
+     * ATOMIC CLAIM
+     * ====================================================
      */
+
     for (
       const message of available
     ) {
@@ -2076,7 +2249,9 @@ async function randomReply(
       /*
        * Somebody else claimed it
        */
-      if (!claimed) {
+      if (
+        !claimed
+      ) {
 
         continue;
 
@@ -2084,14 +2259,13 @@ async function randomReply(
 
 
       /*
-       * Success
+       * ==================================================
+       * CLAIM SUCCESS
+       * ==================================================
        */
+
       state.currentMessage =
         message;
-
-
-      state.remaining =
-        available.length - 1;
 
 
       messageText.textContent =
@@ -2107,9 +2281,30 @@ async function randomReply(
         false;
 
 
+      /*
+       * ==================================================
+       * GET GLOBAL COUNT AFTER CLAIM
+       * ==================================================
+       */
+
+      const usedAfterClaim =
+        await getUsedReplyMessageIds(
+          state.tweetId
+        );
+
+
+      state.remaining =
+        Math.max(
+          state.messages.length -
+          usedAfterClaim.size,
+          0
+        );
+
+
       updateRemaining(
         remainingCount,
-        state.remaining
+        state.remaining,
+        state.messages.length
       );
 
 
@@ -2119,13 +2314,13 @@ async function randomReply(
 
 
     /*
-     * Everything was taken
+     * ====================================================
+     * EVERYTHING WAS TAKEN
+     * ====================================================
      */
+
     state.currentMessage =
       null;
-
-
-    state.remaining = 0;
 
 
     messageText.textContent =
@@ -2137,16 +2332,36 @@ async function randomReply(
     );
 
 
+    /*
+     * Query again
+     */
+    const finalUsedIds =
+      await getUsedReplyMessageIds(
+        state.tweetId
+      );
+
+
+    state.remaining =
+      Math.max(
+        state.messages.length -
+        finalUsedIds.size,
+        0
+      );
+
+
     updateRemaining(
       remainingCount,
-      0
+      state.remaining,
+      state.messages.length
     );
 
   }
 
   catch (error) {
 
-    console.error(error);
+    console.error(
+      error
+    );
 
 
     alert(
@@ -2160,6 +2375,7 @@ async function randomReply(
 
     state.busy =
       false;
+
 
     randomBtn.disabled =
       false;
@@ -2179,7 +2395,7 @@ async function getUsedPostMessageIds(
 
   const url =
     SUPABASE_URL +
-    "/rest/v1/used_post_messages" +
+    "/rest/v1/used_post_messages_v2" +
     "?select=message_id" +
     "&topic=eq." +
     encodeURIComponent(
@@ -2208,7 +2424,9 @@ async function getUsedPostMessageIds(
     );
 
 
-  if (!response.ok) {
+  if (
+    !response.ok
+  ) {
 
     const text =
       await response.text();
@@ -2250,7 +2468,7 @@ async function getUsedReplyMessageIds(
 
   const url =
     SUPABASE_URL +
-    "/rest/v1/used_reply_messages" +
+    "/rest/v1/used_reply_messages_v2" +
     "?select=message_id" +
     "&tweet_id=eq." +
     encodeURIComponent(
@@ -2279,7 +2497,9 @@ async function getUsedReplyMessageIds(
     );
 
 
-  if (!response.ok) {
+  if (
+    !response.ok
+  ) {
 
     const text =
       await response.text();
@@ -2323,7 +2543,7 @@ async function claimPostMessage(
   const response =
     await fetch(
       SUPABASE_URL +
-      "/rest/v1/rpc/claim_post_message",
+      "/rest/v1/rpc/claim_post_message_v2",
       {
 
         method: "POST",
@@ -2355,11 +2575,13 @@ async function claimPostMessage(
 
           })
 
-      }
-    );
+        }
+      );
 
 
-  if (!response.ok) {
+  if (
+    !response.ok
+  ) {
 
     const text =
       await response.text();
@@ -2390,7 +2612,7 @@ async function claimReplyMessage(
   const response =
     await fetch(
       SUPABASE_URL +
-      "/rest/v1/rpc/claim_reply_message",
+      "/rest/v1/rpc/claim_reply_message_v2",
       {
 
         method: "POST",
@@ -2424,11 +2646,13 @@ async function claimReplyMessage(
 
           })
 
-      }
-    );
+        }
+      );
 
 
-  if (!response.ok) {
+  if (
+    !response.ok
+  ) {
 
     const text =
       await response.text();
@@ -2679,11 +2903,12 @@ function escapeHtml(
 
 function updateRemaining(
   element,
-  count
+  remaining,
+  total
 ) {
 
   element.textContent =
-    count;
+    `${remaining}/${total}`;
 
 }
 
